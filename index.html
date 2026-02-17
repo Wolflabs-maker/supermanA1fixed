@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOLFLIX Dashboard: Superman & Lois - Simple Past Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #050505 0%, #1a0505 30%, #050505 70%, #0a0505 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .netflix-gradient {
+            background: linear-gradient(135deg, #E50914 0%, #B20710 50%, #8B0000 100%);
+        }
+        
+        .card-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: revealCard 0.8s ease-out forwards;
+        }
+        
+        @keyframes revealCard {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .exercise-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .exercise-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(229, 9, 20, 0.3);
+            border-color: rgba(229, 9, 20, 0.5);
+        }
+        
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .option-btn:hover {
+            background: rgba(229, 9, 20, 0.2);
+            border-color: #E50914;
+            transform: translateY(-2px);
+        }
+        
+        .correct-answer {
+            background: rgba(34, 197, 94, 0.3) !important;
+            border-color: #22c55e !important;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+        }
+        
+        .incorrect-answer {
+            background: rgba(239, 68, 68, 0.3) !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+        
+        .personal-question {
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.1) 0%, rgba(178, 7, 16, 0.1) 100%);
+            border: 2px solid rgba(229, 9, 20, 0.3);
+            padding: 25px;
+            border-radius: 16px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .personal-question:hover {
+            border-color: #E50914;
+            box-shadow: 0 15px 30px rgba(229, 9, 20, 0.2);
+        }
+        
+        .superman-quote {
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(229, 9, 20, 0.1));
+            animation: fadeInOut 10s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 20%, 80%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(229, 9, 20, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="floating-particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="glass-premium mx-6 mt-6 p-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="text-center md:text-left mb-4 md:mb-0">
+                <h1 class="text-4xl font-bold font-montserrat">WOLF<span class="text-red-500">FLIX</span></h1>
+                <p class="text-gray-300 font-space-mono text-sm mt-2">INTERACTIVE SIMPLE PAST LABORATORY</p>
+            </div>
+            <div class="text-center md:text-right">
+                <p class="text-2xl font-semibold mb-1">Superman & Lois</p>
+                <div class="flex flex-wrap justify-center md:justify-end gap-2">
+                    <span class="px-3 py-1 bg-red-600 rounded-full text-xs font-bold">A1 LEVEL</span>
+                    <span class="px-3 py-1 bg-gray-700 rounded-full text-xs">SIMPLE PAST</span>
+                    <span class="px-3 py-1 bg-blue-600 rounded-full text-xs">MEMORIES</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Dashboard -->
+    <div class="mx-6 mt-8 grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div class="glass-premium p-6 text-center">
+            <div class="text-3xl font-bold netflix-gradient bg-clip-text text-transparent" id="totalScore">0</div>
+            <div class="text-sm text-gray-400 mt-2">Score</div>
+        </div>
+        <div class="glass-premium p-6 text-center">
+            <div class="text-3xl font-bold text-green-400" id="correctAnswers">0</div>
+            <div class="text-sm text-gray-400 mt-2">Correct</div>
+        </div>
+        <div class="glass-premium p-6 text-center">
+            <div class="text-3xl font-bold text-yellow-400" id="currentStreak">0</div>
+            <div class="text-sm text-gray-400 mt-2">Streak</div>
+        </div>
+        <div class="glass-premium p-6 text-center">
+            <div class="text-3xl font-bold text-blue-400" id="accuracy">0%</div>
+            <div class="text-sm text-gray-400 mt-2">Accuracy</div>
+        </div>
+        <div class="glass-premium p-6 text-center">
+            <div class="text-lg font-bold text-purple-400" id="currentLevel">Beginner</div>
+            <div class="text-sm text-gray-400 mt-2">Level</div>
+        </div>
+    </div>
+
+    <!-- Superman Quote -->
+    <div class="mx-6 mt-8 glass-premium p-8 text-center superman-quote">
+        <p class="text-xl italic mb-3" id="supermanQuote">"The only way to know how strong you are is to keep testing your limits."</p>
+        <p class="text-sm text-gray-400">- Superman</p>
+    </div>
+
+    <!-- Grammar Lab: Affirmative -->
+    <div class="mx-6 mt-8 glass-premium p-8">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 netflix-gradient rounded-full flex items-center justify-center mr-4">
+                <span class="text-2xl">🧪</span>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold font-montserrat">Grammar Lab</h2>
+                <p class="text-gray-400">Master Affirmative Simple Past</p>
+            </div>
+        </div>
+        <div id="grammarLab" class="space-y-6">
+            <!-- Exercises will be loaded here -->
+        </div>
+        <button onclick="revealNextSection('speakingZone')" class="mt-8 netflix-gradient px-8 py-4 rounded-full font-bold text-white hover:scale-105 transition-all duration-300">
+            Continue to Speaking Zone →
+        </button>
+    </div>
+
+    <!-- Speaking Zone: Interrogative -->
+    <div class="mx-6 mt-8 glass-premium p-8 hidden" id="speakingZoneSection">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 netflix-gradient rounded-full flex items-center justify-center mr-4">
+                <span class="text-2xl">🗣️</span>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold font-montserrat">Speaking Zone</h2>
+                <p class="text-gray-400">Question Formation Practice</p>
+            </div>
+        </div>
+        <div id="speakingZone" class="space-y-6">
+            <!-- Exercises will be loaded here -->
+        </div>
+        <button onclick="revealNextSection('challengeArena')" class="mt-8 netflix-gradient px-8 py-4 rounded-full font-bold text-white hover:scale-105 transition-all duration-300">
+            Enter Challenge Arena →
+        </button>
+    </div>
+
+    <!-- Challenge Arena: Negative -->
+    <div class="mx-6 mt-8 glass-premium p-8 hidden" id="challengeArenaSection">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 netflix-gradient rounded-full flex items-center justify-center mr-4">
+                <span class="text-2xl">⚡</span>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold font-montserrat">Challenge Arena</h2>
+                <p class="text-gray-400">Negative Forms Mastery</p>
+            </div>
+        </div>
+        <div id="challengeArena" class="space-y-6">
+            <!-- Exercises will be loaded here -->
+        </div>
+        <button onclick="revealNextSection('personalReflection')" class="mt-8 netflix-gradient px-8 py-4 rounded-full font-bold text-white hover:scale-105 transition-all duration-300">
+            Personal Reflection →
+        </button>
+    </div>
+
+    <!-- Personal Reflection -->
+    <div class="mx-6 mt-8 mb-12 glass-premium p-8 hidden" id="personalReflectionSection">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 netflix-gradient rounded-full flex items-center justify-center mr-4">
+                <span class="text-2xl">💭</span>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold font-montserrat">Personal Reflection</h2>
+                <p class="text-gray-400">Share Your Story</p>
+            </div>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="personal-question card-reveal">
+                <h3 class="text-xl font-semibold mb-3 text-red-400">🌟 Your Origin Story</h3>
+                <p class="text-lg mb-4">"What was your most vivid childhood memory?"</p>
+                <div class="text-sm text-gray-400">
+                    <p><strong>Speaking Starter:</strong> "I remember when I was... I felt... It changed me because..."</p>
+                </div>
+            </div>
+            
+            <div class="personal-question card-reveal" style="animation-delay: 0.3s">
+                <h3 class="text-xl font-semibold mb-3 text-red-400">💔 Life Changes</h3>
+                <p class="text-lg mb-4">"What event set you on a different path in life?"</p>
+                <div class="text-sm text-gray-400">
+                    <p><strong>Speaking Starter:</strong> "Something happened that... I decided to... Now I..."</p>
+                </div>
+            </div>
+            
+            <div class="personal-question card-reveal" style="animation-delay: 0.6s">
+                <h3 class="text-xl font-semibold mb-3 text-red-400">❤️ Meeting Someone Special</h3>
+                <p class="text-lg mb-4">"Tell me about the day you met someone important in your life."</p>
+                <div class="text-sm text-gray-400">
+                    <p><strong>Speaking Starter:</strong> "I met... We were... I felt... It was..."</p>
+                </div>
+            </div>
+            
+            <div class="personal-question card-reveal" style="animation-delay: 0.9s">
+                <h3 class="text-xl font-semibold mb-3 text-red-400">🏠 Home & Community</h3>
+                <p class="text-lg mb-4">"What did you love most about your hometown?"</p>
+                <div class="text-sm text-gray-400">
+                    <p><strong>Speaking Starter:</strong> "I loved... The people were... I thought I would... But then..."</p>
+                </div>
+            </div>
+            
+            <div class="personal-question card-reveal" style="animation-delay: 1.2s">
+                <h3 class="text-xl font-semibold mb-3 text-red-400">🦸‍♂️ Your Superpower</h3>
+                <p class="text-lg mb-4">"What skill or talent did you discover about yourself?"</p>
+                <div class="text-sm text-gray-400">
+                    <p><strong>Speaking Starter:</strong> "I discovered that I... People said I was... I used this to..."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            score: 0,
+            correct: 0,
+            total: 0,
+            streak: 0,
+            maxStreak: 0,
+            level: 'Beginner',
+            currentSection: 0
+        };
+
+        // Superman Quotes
+        const quotes = [
+            "The only way to know how strong you are is to keep testing your limits.",
+            "Sometimes you have to take a leap of faith first. The trust part comes later.",
+            "You're much stronger than you think you are. Trust me.",
+            "The 'S' stands for hope.",
+            "Dreams save us. Dreams lift us up and transform us.",
+            "It's not about where you were born, or what powers you have.",
+            "You will give the people of Earth an ideal to strive towards.",
+            "There is a right and a wrong in the universe, and that distinction is not hard to make."
+        ];
+
+        // Exercise Data with VARIED answer positions
+        const exercises = {
+            affirmative: [
+                { question: "Superman _____ to Earth as a baby.", options: ["come", "came", "coming"], correct: 1 },
+                { question: "He _____ up in Smallville with loving parents.", options: ["grew", "grow", "grown"], correct: 0 },
+                { question: "Clark _____ the sun on his face for the first time.", options: ["feel", "felt", "feeling"], correct: 1 },
+                { question: "His adoptive parents _____ him their greatest surprise.", options: ["called", "call", "calling"], correct: 0 },
+                { question: "He _____ Smallville and its community deeply.", options: ["love", "loving", "loved"], correct: 2 },
+                { question: "Clark _____ he would live there forever.", options: ["thought", "think", "thinking"], correct: 0 },
+                { question: "His father's death _____ him on a different path.", options: ["sit", "set", "setting"], correct: 1 },
+                { question: "Eventually, he _____ to Metropolis.", options: ["moved", "move", "moving"], correct: 0 },
+                { question: "Superman _____ Lois Lane at the Daily Planet.", options: ["meet", "met", "meeting"], correct: 1 },
+                { question: "They _____ in love and got married.", options: ["fell", "fall", "falling"], correct: 0 },
+                { question: "The twins _____ into their lives.", options: ["come", "came", "coming"], correct: 1 },
+                { question: "Jonathan _____ always happy and smiling.", options: ["were", "was", "be"], correct: 1 }
+            ],
+            negative: [
+                { question: "Superman _____ stay in one place forever.", options: ["didn't", "don't", "doesn't"], correct: 0 },
+                { question: "He _____ ignore people in danger.", options: ["don't", "didn't", "doesn't"], correct: 1 },
+                { question: "Clark _____ reveal his identity immediately.", options: ["didn't", "don't", "doesn't"], correct: 0 },
+                { question: "He _____ forget his home planet Krypton.", options: ["don't", "doesn't", "didn't"], correct: 2 },
+                { question: "Superman _____ choose the easy path.", options: ["didn't", "don't", "doesn't"], correct: 0 },
+                { question: "His parents _____ treat him differently.", options: ["don't", "didn't", "doesn't"], correct: 1 },
+                { question: "Clark _____ want to be different from others.", options: ["didn't", "don't", "doesn't"], correct: 0 },
+                { question: "He _____ give up when things got difficult.", options: ["don't", "doesn't", "didn't"], correct: 2 },
+                { question: "Superman _____ work alone all the time.", options: ["didn't", "don't", "doesn't"], correct: 0 },
+                { question: "Lois _____ know his secret at first.", options: ["don't", "didn't", "doesn't"], correct: 1 }
+            ],
+            interrogative: [
+                { question: "_____ Superman come from another planet?", options: ["Did", "Do", "Does"], correct: 0 },
+                { question: "_____ he grow up knowing he was different?", options: ["Do", "Did", "Does"], correct: 1 },
+                { question: "_____ Clark work as a journalist?", options: ["Did", "Do", "Does"], correct: 0 },
+                { question: "_____ he meet Lois at the Daily Planet?", options: ["Do", "Does", "Did"], correct: 2 },
+                { question: "_____ they fall in love immediately?", options: ["Did", "Do", "Does"], correct: 0 },
+                { question: "_____ Superman save people every day?", options: ["Do", "Did", "Does"], correct: 1 },
+                { question: "_____ he tell Lois his secret?", options: ["Did", "Do", "Does"], correct: 0 },
+                { question: "_____ the twins have different personalities?", options: ["Do", "Does", "Did"], correct: 2 },
+                { question: "_____ Clark choose to become Superman?", options: ["Did", "Do", "Does"], correct: 0 },
+                { question: "_____ he protect the people he loved?", options: ["Do", "Did", "Does"], correct: 1 }
+            ]
+        };
+
+        // Initialize Dashboard
+        function initDashboard() {
+            createFloatingParticles();
+            loadExercisesProgressively();
+            rotateQuotes();
+            updateProgressChart();
+        }
+
+        // Create floating particles
+        function createFloatingParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Load exercises progressively
+        function loadExercisesProgressively() {
+            loadSectionExercises('grammarLab', exercises.affirmative, 'affirmative');
+        }
+
+        // Load section exercises with staggered animation
+        function loadSectionExercises(containerId, exerciseArray, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            exerciseArray.forEach((exercise, index) => {
+                setTimeout(() => {
+                    const exerciseDiv = document.createElement('div');
+                    exerciseDiv.className = 'exercise-card glass-premium p-6 card-reveal';
+                    exerciseDiv.style.animationDelay = (index * 0.1) + 's';
+                    
+                    exerciseDiv.innerHTML = `
+                        <div class="mb-6">
+                            <div class="flex items-center mb-4">
+                                <span class="w-8 h-8 netflix-gradient rounded-full flex items-center justify-center text-sm font-bold mr-3">
+                                    ${index + 1}
+                                </span>
+                                <p class="text-lg font-medium">${exercise.question}</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                ${exercise.options.map((option, optIndex) => 
+                                    `<button onclick="checkAnswer('${type}', ${index}, ${optIndex})" 
+                                     class="option-btn hover:scale-105 transition-all duration-300">
+                                        ${option}
+                                     </button>`
+                                ).join('')}
+                            </div>
+                            <div class="feedback mt-6 hidden"></div>
+                        </div>
+                    `;
+                    container.appendChild(exerciseDiv);
+                }, index * 200);
+            });
+        }
+
+        // Check Answer Function
+        function checkAnswer(type, exerciseIndex, selectedOption) {
+            const exercise = exercises[type][exerciseIndex];
+            const exerciseCards = document.querySelectorAll(`#${type === 'affirmative' ? 'grammarLab' : type === 'interrogative' ? 'speakingZone' : 'challengeArena'} .exercise-card`);
+            const exerciseCard = exerciseCards[exerciseIndex];
+            const buttons = exerciseCard.querySelectorAll('.option-btn');
+            const feedback = exerciseCard.querySelector('.feedback');
+            
+            gameState.total++;
+            
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+                if (index === exercise.correct) {
+                    btn.classList.add('correct-answer');
+                } else if (index === selectedOption && index !== exercise.correct) {
+                    btn.classList.add('incorrect-answer');
+                }
+            });
+            
+            if (selectedOption === exercise.correct) {
+                gameState.correct++;
+                gameState.streak++;
+                gameState.maxStreak = Math.max(gameState.maxStreak, gameState.streak);
+                gameState.score += 10 + (gameState.streak * 5);
+                
+                feedback.innerHTML = `
+                    <div class="bg-green-900/30 border border-green-500 rounded-lg p-4">
+                        <p class="text-green-400 font-semibold">✅ Excellent! Perfect Simple Past!</p>
+                        <p class="text-sm text-gray-300 mt-2">+${10 + (gameState.streak * 5)} points (Streak bonus: ${gameState.streak})</p>
+                    </div>
+                `;
+            } else {
+                gameState.streak = 0;
+                feedback.innerHTML = `
+                    <div class="bg-red-900/30 border border-red-500 rounded-lg p-4">
+                        <p class="text-red-400 font-semibold">❌ Not quite right!</p>
+                        <p class="text-white mt-2">Correct answer: <strong>${exercise.options[exercise.correct]}</strong></p>
+                        <p class="text-sm text-gray-300 mt-2">Remember: Simple Past shows completed actions in the past.</p>
+                    </div>
+                `;
+            }
+            
+            feedback.classList.remove('hidden');
+            updateStats();
+            
+            // Add celebration effect for correct answers
+            if (selectedOption === exercise.correct) {
+                createCelebrationEffect(exerciseCard);
+            }
+        }
+
+        // Reveal next section
+        function revealNextSection(sectionId) {
+            const section = document.getElementById(sectionId + 'Section');
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            if (sectionId === 'speakingZone') {
+                loadSectionExercises('speakingZone', exercises.interrogative, 'interrogative');
+            } else if (sectionId === 'challengeArena') {
+                loadSectionExercises('challengeArena', exercises.negative, 'negative');
+            }
+        }
+
+        // Update Statistics
+        function updateStats() {
+            document.getElementById('totalScore').textContent = gameState.score.toLocaleString();
+            document.getElementById('correctAnswers').textContent = gameState.correct;
+            document.getElementById('currentStreak').textContent = gameState.streak;
+            
+            const accuracy = gameState.total > 0 ? Math.round((gameState.correct / gameState.total) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            // Update level
+            if (gameState.score >= 1500) gameState.level = 'Superman';
+            else if (gameState.score >= 1000) gameState.level = 'Hero';
+            else if (gameState.score >= 600) gameState.level = 'Advanced';
+            else if (gameState.score >= 300) gameState.level = 'Intermediate';
+            
+            document.getElementById('currentLevel').textContent = gameState.level;
+        }
+
+        // Rotate Quotes
+        function rotateQuotes() {
+            let currentQuote = 0;
+            setInterval(() => {
+                document.getElementById('supermanQuote').textContent = `"${quotes[currentQuote]}"`;
+                currentQuote = (currentQuote + 1) % quotes.length;
+            }, 10000);
+        }
+
+        // Create celebration effect
+        function createCelebrationEffect(element) {
+            const celebration = document.createElement('div');
+            celebration.innerHTML = '🎉';
+            celebration.style.position = 'absolute';
+            celebration.style.fontSize = '2rem';
+            celebration.style.animation = 'bounce 1s ease-out';
+            celebration.style.zIndex = '1000';
+            element.style.position = 'relative';
+            element.appendChild(celebration);
+            
+            setTimeout(() => {
+                celebration.remove();
+            }, 1000);
+        }
+
+        // Update Progress Chart
+        function updateProgressChart() {
+            // This would integrate with Chart.js for visual progress
+            console.log('Progress updated:', gameState);
+        }
+
+        // Initialize on load
+        window.onload = initDashboard;
+    </script>
+</body>
+</html>
